@@ -94,18 +94,6 @@ describe Board do
         board_update.update_board(1, player_update)
         expect(board_update.cells[1][2]).to eq (player_marker)
       end
-
-      it 'shouldn\'t add player marker when column is filled' do
-        board_update.cells[1] = ["\u26AA", "\u26AA", "\u26AB", "\u26AB", "\u26AA", "\u26AA", "\u26AB"]
-        player_marker = "\u26AA"
-        board_update.update_board(1, player_update)
-        expect(board_update.cells[1][6]).not_to eq (player_marker)
-      end
-      
-      it 'should return nil when column is full' do
-        board_update.cells[1] = ["\u26AA", "\u26AA", "\u26AB", "\u26AB", "\u26AA", "\u26AA", "\u26AB"]
-        expect(board_update.update_board(1, player_update)).to eq(nil)
-      end
     end
   end
 
