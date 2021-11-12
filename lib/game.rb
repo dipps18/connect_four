@@ -10,19 +10,30 @@ class Game
   end
 
   def play_game
-    @player1 = Player.new(get_valid_name(1), "\u26AA")
-    @player2 = Player.new(get_valid_name(2), "\u26AB")
+    @player1 = Player.new(get_valid_name(1), "  \u26AA  ")
+    @player2 = Player.new(get_valid_name(2), "  \u26AB  ")
     game_loop
-    display_winner(board.cells_filled)
+    if board.gameover?
+      board.cells_filled % 2 == 0 ? display_winner(player2.name) : display_winner(player1.name)
+    else
+      declare_draw
+    end
   end
 
 
   def game_loop
     loop do
+      board.display_board
       break if board.gameover? || board.cells_filled == 49
-      position = get_valid_position((board.cells_filled % 2) + 1)
-      board.cells_filled % 2 == 0 ? player1.player_update(position, board) : player2.player_update(position, board)
-      board.update_board(position)
+      if board.cells_filled % 2 == 0 
+        position = get_valid_position(player1.name)
+        player1.player_update(position, board)
+        board.update_board(position, player1.marker)
+      else
+        position = get_valid_position(player2.name)
+        player2.player_update(position, board)
+        board.update_board(position, player2.marker)
+      end
       board.cells_filled += 1
     end
   end
@@ -31,7 +42,7 @@ class Game
     loop do
       prompt_position(player_id)
       position = gets.chomp
-      position.match?(/[0-6]/) ? break : next
+      position.match?(/[0-6]/) ? (return position.to_i) : next
     end
   end
 
@@ -39,7 +50,7 @@ class Game
     loop do
       prompt_name(player_id)
       name = gets.chomp
-      break if name.match?(/\S/)
+      return name if name.match?(/\S/)
     end
   end
 end
