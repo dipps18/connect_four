@@ -33,7 +33,7 @@ class Game
     loop do
       prompt_position(player_id)
       position = gets.chomp
-      return position.to_i if position.match?(/[0-6]/) && position.length == 1
+      return position.to_i if position.match?(/[0-6]/) && position.length == 1 && board.get_first_empty_row(position.to_i) != 7
     end
   end
 

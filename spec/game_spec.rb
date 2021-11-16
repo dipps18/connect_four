@@ -126,12 +126,21 @@ describe Game do
         game.get_valid_position(player_id)
       end
     end
-    
+
     context 'When position is invalid and then valid' do
-      before do
-        allow(game).to receive(:gets).and_return('a', '6')
+
+      it 'should receive gets twice when position is filled' do
+        allow(game).to receive(:gets).and_return('5', '6')
+        player1_marker = "  \u26AA  "
+        player2_marker = "  \u26AB  "
+        game.board.cells[5] = [player1_marker, player1_marker, player1_marker, player2_marker, player2_marker, player2_marker, player1_marker]
+        player_id = 2
+        expect(game).to receive(:gets).twice
+        game.get_valid_position(player_id)
       end
+
       it 'should receive gets twice' do
+        allow(game).to receive(:gets).and_return('a', '6')
         player_id = 2
         expect(game).to receive(:gets).twice
         game.get_valid_position(player_id)
@@ -140,7 +149,6 @@ describe Game do
     end
 
     context 'When position is invalid, invalid and then valid' do
-      subject(:game) { described_class.new }
       context 'When position is valid' do
         before do
           allow(game).to receive(:gets).and_return('55' , '-', '0')
